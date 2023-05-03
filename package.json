@@ -1,0 +1,21 @@
+{
+  "name": "aliexpresswishlistscraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "productsRetrieval.js",
+  "scripts": {
+    "start": "node productsRetrieval.js && node shippingRetrieval.js",
+    "products": "node productsRetrieval.js",
+    "shipping": "node shippingRetrieval.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "latest"
+  },
+  "devDependencies": {
+    "eslint": "^8.39.0"
+  }
+}
