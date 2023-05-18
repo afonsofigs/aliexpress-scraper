@@ -89,13 +89,12 @@ const fs = require('fs');
 
   let csvContent = fullWish.map((e) => e.join(',')).join('\n');
 
-  fs.writeFile('fullWish.csv', csvContent, (err) => {
+  fs.writeFileSync('fullWish.csv', csvContent, (err) => {
     if (err) {
       return console.log(err);
     }
   });
   console.log('The file was saved!');
-  //browser.close();
   // eslint-disable-next-line no-undef
   process.exit();
 })();

@@ -226,12 +226,16 @@ const fs = require('fs');
 
   let csvContent = fullWish.map((e) => e.join(',')).join('\n');
 
-  fs.writeFile('fullWish.csv', csvContent, (err) => {
+  fs.writeFileSync('fullWish.csv', csvContent, (err) => {
     if (err) {
       return console.log(err);
     }
   });
-
+  fs.writeFileSync('fullWish_b4Ship.csv', csvContent, (err) => {
+    if (err) {
+      return console.log(err);
+    }
+  });
   console.log('The file was saved!');
   // eslint-disable-next-line no-undef
   process.exit();
