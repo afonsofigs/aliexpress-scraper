@@ -1,6 +1,6 @@
 # Aliexpress Wishlist to CSV
 
-## How to run:
+## How to run the scraper:
 
 1.  Clone this repository to your local machine.
 2.  Have Google Chrome installed.
@@ -15,7 +15,7 @@
 
 5.  **Login to Aliexpress.com** normally on the debugging Google Chrome window, and change the website **language to English**.
 
-6.  Run the program: `npm start` and watch it run. Because google chrome changes the focus of the mouse when a new tab is open, it may be annoying to use your computer while this is running. Optional commands:
+6.  Make sure you have `pnpm` installed. Install all the dependencies with `pnpm install` and then run the program with `npm start`. Because google chrome changes the focus of the mouse when a new tab is open, it may be annoying to use your computer while this is running. Optional commands:
 
     - The code run is split in two phases: the product info gathering and the shipping costs gathering phase. each phase can be run with `npm run products` and `npm run shipping`, respectively.
 
@@ -30,3 +30,11 @@
 - The attributes stored for each product and currently available on the output CSV file are: `Wishlist Name, Product Name, Image Thumbnail URL, Base Price, Shipping Price, Total Price, Product URL`
 
 - If the program hang between phases, `control+C` out of the first run after the "File was saved" message and run the second phase manually. See optional commands on the sixth step.
+
+---
+
+## How to run the webserver to see the products:
+
+1. After running the scraper, make sure you have a file named `fullWish.csv` on the root directory.
+2. Make sure you have `pnpm` installed. From the root directory run `npm run webserver`.
+3. A webpage will open with the website and the terminal will also display the url where it is available.

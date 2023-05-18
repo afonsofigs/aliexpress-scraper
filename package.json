@@ -7,6 +7,7 @@
     "start": "node productsRetrieval.js && node shippingRetrieval.js",
     "products": "node productsRetrieval.js",
     "shipping": "node shippingRetrieval.js",
+    "webserver": "cd aliscraperweb && pnpm i && npm run build && npm run preview -- --open --host",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
