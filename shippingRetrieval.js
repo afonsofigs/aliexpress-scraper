@@ -68,13 +68,17 @@ const fs = require('fs');
         `#root > div > div.product-main > div.product-main-wrap > div.product-info > div.product-dynamic-shipping > div > div > div:nth-child(${nTitleLayouts}) > span > span > strong`
       ).innerText;
     });
+    // console.log(shippingText);
 
     if (shippingText.startsWith('Free')) continue;
 
     //Shipping is at index 5 and totalPrice is at 6
     //totalPrice.toInt += shipping.toInt
-    //remove the "Shipping: € " part
-    shippingText = shippingText.slice(12).replace(',', '.');
+    //remove the "Shipping: €" part
+    shippingText = shippingText
+      .split('Shipping: ')[1]
+      .slice(0, -1)
+      .replace(',', '.');
     prod[4] = shippingText;
     const fullPrice = (parseFloat(prod[5]) + parseFloat(shippingText)).toFixed(
       2
@@ -89,8 +93,9 @@ const fs = require('fs');
     if (err) {
       return console.log(err);
     }
-    console.log('The file was saved!');
   });
-
+  console.log('The file was saved!');
   //browser.close();
+  // eslint-disable-next-line no-undef
+  process.exit();
 })();

@@ -12,7 +12,7 @@ const fs = require('fs');
     height: 950,
   });
 
-  let pageUrl = 'https://best.aliexpress.com/?lan=en';
+  let pageUrl = 'https://www.aliexpress.com/p/wishlist/index.html';
 
   async function checkAli404(page) {
     // eslint-disable-next-line no-constant-condition
@@ -57,52 +57,11 @@ const fs = require('fs');
   });
   await checkAli404(page);
 
-  //Ignore coupon banner
-  const couponBanner = 'img.btn-close';
-  const couponBanner2 =
-    'body > div:nth-child(46) > div > div:nth-child(1) > img:nth-child(2)';
-  try {
-    //console.log("Starting time")
-    //await page.waitForTimeout(4000)
-    //console.log("End time")
-    await page.click(couponBanner, { clickCount: 3, delay: 1000 });
-    console.log('Clicked on close coupon banner');
-  } catch (error) {
-    console.log("Coupon banner didn't appear.");
-    try {
-      await page.click(couponBanner2, { clickCount: 3, delay: 1000 });
-    } catch (error) {
-      console.log("Coupon banner2 didn't appear.");
-    }
-  }
-
-  //Click on wish list
-  console.log('Clicking on wish list banner btn');
-  await page.click(
-    '#nav-global > div.ng-item-wrap.ng-personal-info > div.ng-item.nav-pinfo-item.nav-wishlist > a'
-  );
-  await checkAli404(page);
-
-  //Check if url is login.aliexpress.com
-  // const loginPageStart = 'https://login';
-  // if (page.url().startsWith(loginPageStart)) {
-  //   console.log('Login page');
-  //   // login through gmail
-  //   const gmailBtn = '#root > div > div > section > div > div:nth-child(1) > a';
-  //   await page.waitForSelector(gmailBtn).then(() => {
-  //     page.click(gmailBtn);
-  //   });
-  //   console.log('Please click on your gmail account');
-  //   await page.waitForTimeout(15000);
-  //   console.log('Login click timeout finished');
-  // } else console.log('Already logged.');
-
   if (!page.url().includes('wishlist')) throw new Error('Wishlist not loaded');
 
-  // const myListsBtn =
-  //   '#root > div.WishList--wishListContainer--2BbatJB > div:nth-child(2) > div > div.comet-tabs-wrapper > div > div:nth-child(2)';
   const myListsBtn =
     '#root > div.WishList--wishListContainer--2BbatJB > div > div > div.comet-tabs-wrapper > div > div:nth-child(2)';
+
   // Wait for button "My lists (..)"
   const listContainer =
     '#root > div.WishList--wishListContainer--2BbatJB > div:nth-child(2) > div > div.comet-tabs-container > div.comet-tabs-pane.comet-tabs-pane-active > div > div > div > div > div:nth-child(1)';
@@ -191,11 +150,6 @@ const fs = require('fs');
 
       // Get url of item after clicking it and it being opened in a new tab
       const [target] = await Promise.all([
-        // new Promise((resolve) => {
-        //   browser.once('targetcreated', async (target) => {
-        //     resolve(target.url());
-        //   });
-        // }),
         new Promise((resolve) => {
           browser.once('targetcreated', resolve);
         }),
@@ -205,7 +159,6 @@ const fs = require('fs');
       ]);
 
       const url = await target.url();
-      // console.log(await url);
       const tabPage = await target.page();
       if ((await tabPage) !== null) {
         await tabPage.close();
@@ -277,8 +230,9 @@ const fs = require('fs');
     if (err) {
       return console.log(err);
     }
-    console.log('The file was saved!');
   });
 
-  return;
+  console.log('The file was saved!');
+  // eslint-disable-next-line no-undef
+  process.exit();
 })();
