@@ -31,13 +31,38 @@
 </script>
 
 <div class="p-10">
-	<div class="my-6 flex flex-row flex-wrap gap-3 sticky top-5">
+	<div class="mb-5 flex flex-row flex-wrap gap-3 sticky top-5">
 		<Filter
 			title="Wishlists"
 			options={data.serverData.wishlists}
 			bind:optionSelected={wishlistsSelected}
 		/>
-		<PriceFilter bind:minPrice bind:maxPrice bind:realMaxPrice />
+		<PriceFilter bind:minPrice bind:maxPrice bind:realMaxPrice /><!-- Back to top button -->
+		<button
+			class="rounded-full border w-[55px] text-center items-center bg-white"
+			on:click={() =>
+				scrollTo({
+					top: 0,
+					behavior: 'smooth'
+				})}
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="currentColor"
+				stroke-width="2.5"
+				stroke="currentColor"
+				class="h-4 w-4 m-auto"
+			>
+				<path
+					fill-rule="evenodd"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75"
+					clip-rule="evenodd"
+				/>
+			</svg>
+		</button>
 	</div>
 
 	<div class="overflow-x-auto rounded-lg border border-gray-200">
