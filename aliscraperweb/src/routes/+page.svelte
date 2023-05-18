@@ -59,7 +59,7 @@
 							{item.Wishlist}
 						</td>
 						<td class="px-4 py-2 text-gray-700 max-w-xs"
-							><a href={item.ProdURL}>{item.ProductName}</a></td
+							><a href={item.ProdURL} target="_blank">{item.ProductName}</a></td
 						>
 						<td class="whitespace-nowrap px-4 py-2 text-gray-700"
 							><img src={item.ImageURL} alt={item.ProductName} class="m-auto" /></td
