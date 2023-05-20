@@ -117,7 +117,7 @@ const fs = require('fs');
       return console.log(err);
     }
   });
-  console.log('The file was saved!');
+  console.log('\nThe file was saved!');
   // eslint-disable-next-line no-undef
   process.exit();
 })();

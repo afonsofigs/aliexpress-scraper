@@ -18,7 +18,7 @@ export const load = (async () => {
 		.fromFile('../fullWish.csv')
 		.then((data) => {
 			console.log('First element:', data[0]);
-			items = data.filter((e) => e.TotalPrice !== 'unavailable');
+			items = data;
 		});
 
 	let wishlists: string[] = [];

@@ -141,7 +141,7 @@ const fs = require('fs');
     const listTitle = await page.evaluate((listTitleLocation) => {
       return document.querySelector(listTitleLocation).innerText;
     }, listTitleLocation);
-    console.log('Wishlist: ' + listTitle);
+    console.log('\nWishlist ' + i + ': ' + listTitle);
 
     await page.waitForSelector(nListItemsLocation);
     //Get number of list items
@@ -158,70 +158,92 @@ const fs = require('fs');
     for (let p = 1; p <= nListItems; p++) {
       const currItemlocation = `#root > div.WishList--wishListContainer--2BbatJB > div > div > div.comet-tabs-container > div.comet-tabs-pane.comet-tabs-pane-active > div.ListDetail--wishListContainer--371wbK0 > div:nth-child(3) > div > div > div > div:nth-child(${p}) > div.AllListItem--alllistItemContainer--3BpNMAE`;
 
-      // Get url of item after clicking it and it being opened in a new tab
-      const [target] = await Promise.all([
-        new Promise((resolve) => {
-          browser.once('targetcreated', resolve);
-        }),
-        page.click(
-          currItemlocation + ' > div.AllListItem--leftContainer--1eqBej2'
-        ),
-      ]);
+      // If product currently unavailable, ignore, continue
+      const isUnavailableLocation =
+        currItemlocation + ' > div.AllListItem--rightContainer--2AiihCN';
 
-      const url = await target.url();
-      const tabPage = await target.page();
-      if ((await tabPage) !== null) {
-        await tabPage.close();
+      const isProdUnavailable = await page.evaluate((isUnavailableLocation) => {
+        let isUnavailable = false;
+        for (let node of document.querySelector(isUnavailableLocation)
+          .childNodes) {
+          if (node.className.includes('invalid')) {
+            isUnavailable = true;
+            break;
+          }
+        }
+        return isUnavailable;
+      }, isUnavailableLocation);
+
+      if (isProdUnavailable) {
+        printProgress('Product unavailable ' + p, nListItems);
       }
 
-      fullWish.push(
-        ...(await page.evaluate(
-          (listTitle, currItemlocation, prodURL) => {
-            const price = document
-              .querySelector(
-                currItemlocation +
-                  ` > div.AllListItem--rightContainer--2AiihCN > p`
-              )
-              .innerText.replaceAll(',', '.')
-              .replaceAll(' ', '')
-              .replaceAll('€', '')
-              .replaceAll('$', '');
+      if (!isProdUnavailable) {
+        // Get url of item after clicking it and it being opened in a new tab
+        const [target] = await Promise.all([
+          new Promise((resolve) => {
+            browser.once('targetcreated', resolve);
+          }),
+          page.click(
+            currItemlocation + ' > div.AllListItem--leftContainer--1eqBej2'
+          ),
+        ]);
 
-            // If no price, it is unavailable
-            if (price === '') return [];
+        const url = await target.url();
+        const tabPage = await target.page();
+        if ((await tabPage) !== null) {
+          await tabPage.close();
+        }
 
-            const name = document
-              .querySelector(
-                currItemlocation +
-                  ' > div.AllListItem--rightContainer--2AiihCN > h3'
-              )
-              .innerText.replaceAll(',', ' ');
+        fullWish.push(
+          ...(await page.evaluate(
+            (listTitle, currItemlocation, prodURL) => {
+              const price = document
+                .querySelector(
+                  currItemlocation +
+                    ` > div.AllListItem--rightContainer--2AiihCN > p`
+                )
+                .innerText.replaceAll(',', '.')
+                .replaceAll(' ', '')
+                .replaceAll('€', '')
+                .replaceAll('$', '');
 
-            const img = document.querySelector(
-                currItemlocation +
-                  ' > div.AllListItem--leftContainer--1eqBej2 > div'
-              ),
-              style = img.currentStyle || window.getComputedStyle(img, false),
-              imgUrl = style.backgroundImage.slice(4, -1).replace(/"/g, '');
+              // If no price, it is unavailable
+              if (price === '') return [];
 
-            // const url =  newPage.evaluate(() => document.location.href);
-            // console.log(url);
+              const name = document
+                .querySelector(
+                  currItemlocation +
+                    ' > div.AllListItem--rightContainer--2AiihCN > h3'
+                )
+                .innerText.replaceAll(',', ' ');
 
-            const shipping = '0.00';
-            const totalPrice = price;
+              const img = document.querySelector(
+                  currItemlocation +
+                    ' > div.AllListItem--leftContainer--1eqBej2 > div'
+                ),
+                style = img.currentStyle || window.getComputedStyle(img, false),
+                imgUrl = style.backgroundImage.slice(4, -1).replace(/"/g, '');
 
-            //Build product info
-            return [
-              [listTitle, name, imgUrl, price, shipping, totalPrice, prodURL],
-            ];
-          },
-          listTitle,
-          currItemlocation,
-          url
-        ))
-      );
+              // const url =  newPage.evaluate(() => document.location.href);
+              // console.log(url);
 
-      printProgress(p, nListItems);
+              const shipping = '0.00';
+              const totalPrice = price;
+
+              //Build product info
+              return [
+                [listTitle, name, imgUrl, price, shipping, totalPrice, prodURL],
+              ];
+            },
+            listTitle,
+            currItemlocation,
+            url
+          ))
+        );
+        printProgress(p, nListItems);
+      }
+
       if (p % 10 === 0) {
         // Each 10 items scroll to the bottom
         await page.evaluate(() => window.scrollBy(0, 10000));
@@ -246,7 +268,7 @@ const fs = require('fs');
       return console.log(err);
     }
   });
-  console.log('The file was saved!');
+  console.log('\nThe file was saved!');
   // eslint-disable-next-line no-undef
   process.exit();
 })();
