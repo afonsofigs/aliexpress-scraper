@@ -52,6 +52,17 @@ const fs = require('fs');
     }
   }
 
+  function printProgress(npidx, totalProds) {
+    // eslint-disable-next-line no-undef
+    process.stdout.clearLine(0);
+    // eslint-disable-next-line no-undef
+    process.stdout.cursorTo(0);
+    const progress = npidx + '/' + totalProds;
+    // console.log(progress);
+    // eslint-disable-next-line no-undef
+    process.stdout.write(progress);
+  }
+
   await page.goto(pageUrl, {
     waitUntil: 'networkidle0', // 'networkidle0' is very useful for SPAs.
   });
@@ -78,7 +89,7 @@ const fs = require('fs');
     )
   );
 
-  console.log('nLists: ', nLis);
+  console.log('N wishlists: ' + nLis);
 
   const listsParent =
     '#root > div.WishList--wishListContainer--2BbatJB > div:nth-child(2) > div > div.comet-tabs-container > div > div > div > div > div';
@@ -115,7 +126,6 @@ const fs = require('fs');
     //Click on "My Lists (10)"
     await page.$eval(myListsBtn, (element) => element.click());
     // await page.click(myListsBtn);
-    console.log('Clickou!');
 
     if (i % 10 === 0) {
       // Each 10 items scroll to the bottom
@@ -131,7 +141,7 @@ const fs = require('fs');
     const listTitle = await page.evaluate((listTitleLocation) => {
       return document.querySelector(listTitleLocation).innerText;
     }, listTitleLocation);
-    console.log('Title: ' + listTitle);
+    console.log('Wishlist: ' + listTitle);
 
     await page.waitForSelector(nListItemsLocation);
     //Get number of list items
@@ -142,7 +152,7 @@ const fs = require('fs');
           .innerText.split(' ')[2];
       }, nListItemsLocation)
     );
-    console.log('nItems: ' + nListItems);
+    console.log('N items: ' + nListItems);
 
     //For each item in the list
     for (let p = 1; p <= nListItems; p++) {
@@ -211,8 +221,8 @@ const fs = require('fs');
         ))
       );
 
+      printProgress(p, nListItems);
       if (p % 10 === 0) {
-        console.log(p);
         // Each 10 items scroll to the bottom
         await page.evaluate(() => window.scrollBy(0, 10000));
         await page.waitForTimeout(3000);

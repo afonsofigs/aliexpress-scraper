@@ -18,9 +18,27 @@ const fs = require('fs');
     fullWish[i] = fullWish[i].split(',');
   }
 
+  function printProgress(fullPrice, npidx, totalProds) {
+    // eslint-disable-next-line no-undef
+    process.stdout.clearLine(0);
+    // eslint-disable-next-line no-undef
+    process.stdout.cursorTo(0);
+    const progress = fullPrice + ' -> ' + npidx + '/' + totalProds;
+    // console.log(progress);
+    // eslint-disable-next-line no-undef
+    process.stdout.write(progress);
+  }
+
+  let npidx = 0;
+  let resFullWish = [];
+  let totalProds = fullWish.length;
+
   for (let prod of fullWish) {
     //skip first line
-    if (prod[0] === 'Wishlist') continue;
+    if (prod[0] === 'Wishlist') {
+      resFullWish[npidx++] = prod;
+      continue;
+    }
 
     //Product website
     // eslint-disable-next-line no-constant-condition
@@ -46,8 +64,8 @@ const fs = require('fs');
         );
       })
     ) {
-      prod[4] = 'unavailable';
-      prod[5] = 'unavailable';
+      printProgress('Product unavailable', npidx, totalProds);
+      totalProds -= 1;
       continue;
     }
 
@@ -70,7 +88,11 @@ const fs = require('fs');
     });
     // console.log(shippingText);
 
-    if (shippingText.startsWith('Free')) continue;
+    if (shippingText.startsWith('Free')) {
+      printProgress(prod[5], npidx, totalProds);
+      resFullWish[npidx++] = prod;
+      continue;
+    }
 
     //Shipping is at index 5 and totalPrice is at 6
     //totalPrice.toInt += shipping.toInt
@@ -84,10 +106,11 @@ const fs = require('fs');
       2
     );
     prod[5] = fullPrice;
-    console.log(fullPrice);
+    printProgress(fullPrice, npidx, totalProds);
+    resFullWish[npidx++] = prod;
   }
 
-  let csvContent = fullWish.map((e) => e.join(',')).join('\n');
+  let csvContent = resFullWish.map((e) => e.join(',')).join('\n');
 
   fs.writeFileSync('fullWish.csv', csvContent, (err) => {
     if (err) {
