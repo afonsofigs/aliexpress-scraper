@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import '../app.css';
 	import Filter from './Filter.svelte';
 	import PriceFilter from './PriceFilter.svelte';
@@ -18,6 +19,15 @@
 	})();
 	let maxPrice = realMaxPrice;
 
+	function scrollTop() {
+		if (typeof scrollTo == 'function') {
+			scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
+		}
+	}
+
 	$: (wishlistsSelected, minPrice, maxPrice),
 		(() => {
 			filteredData = (
@@ -27,7 +37,8 @@
 			).filter(
 				(item) => minPrice <= parseFloat(item.TotalPrice) && maxPrice >= parseFloat(item.TotalPrice)
 			);
-		})();
+		})(),
+		scrollTop();
 </script>
 
 <div class="p-10">
@@ -40,11 +51,7 @@
 		<PriceFilter bind:minPrice bind:maxPrice bind:realMaxPrice /><!-- Back to top button -->
 		<button
 			class="rounded-full border w-[55px] text-center items-center bg-white"
-			on:click={() =>
-				scrollTo({
-					top: 0,
-					behavior: 'smooth'
-				})}
+			on:click={scrollTop}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
