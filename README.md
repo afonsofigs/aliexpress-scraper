@@ -38,3 +38,11 @@
 1. After running the scraper, make sure you have a file named `fullWish.csv` on the root directory.
 2. Make sure you have `pnpm` installed. From the root directory run `npm run webserver`.
 3. A webpage will open with the website and the terminal will also display the url where it is available.
+
+### Creating an override files, for custom price or image changes:
+
+1. Create a `fullWish_over.csv` on the root directory.
+2. In this file, copy and paste the header, first line, from the `fullWish.csv` file.
+3. After this header, copy and paste the full object line you want to override the information, from the `fullWish.csv` file, and make the changes as you want.
+4. The only change that cannot be made is the URL, as this is what is used to know which object is being overriden.
+5. Re-run `npm run webserver` and the overrides should now be visible on the webserver.
