@@ -12,7 +12,7 @@ const fs = require('fs');
     height: 950,
   });
 
-  let fullWish = require('fs').readFileSync('fullWish.csv', 'utf8');
+  let fullWish = fs.readFileSync('fullWish.csv', 'utf8');
   fullWish = fullWish.split('\n');
   for (let i in fullWish) {
     fullWish[i] = fullWish[i].split(',');
