@@ -69,27 +69,21 @@ const fs = require('fs');
       continue;
     }
 
-    //Get shipping price, check if it says free
-    let shippingText = await page.evaluate(() => {
-      //5-day shipping info makes a div with the same class as we wanted here, so we need to count how many we get and
-      // select the latter
-      let nTitleLayouts = 1;
-      let firstFlag = true;
-      // Selector of product-shipping > dynamic-shipping
-      const dynamic_shipping_div =
-        '#root > div.pdp-wrap.pdp-body > div.pdp-body-right > div > div > div.shipping--wrap--Dhb61O7 > div > div';
-      for (let child of document.querySelector(dynamic_shipping_div).children)
-        if (child.classList.contains('dynamic-shipping-titleLayout'))
-          if (!firstFlag) nTitleLayouts += 1;
-          else firstFlag = false;
-
-      return document.querySelector(
-        dynamic_shipping_div + ` > div:nth-child(${nTitleLayouts})`
-      ).innerText;
-    });
+    let shippingText = await page.evaluate(
+      () =>
+        document.querySelector(
+          '#root > div.pdp-wrap.pdp-body > div.pdp-body-right > div > div > div.shipping--wrap--Dhb61O7'
+        ).innerText
+    );
     // console.log(shippingText);
 
-    if (shippingText.startsWith('Free')) {
+    if (shippingText.includes("can't be shipped")) {
+      printProgress('Product unavailable', npidx, totalProds);
+      totalProds -= 1;
+      continue;
+    }
+
+    if (shippingText.includes('Free')) {
       printProgress(prod[5], npidx, totalProds);
       resFullWish[npidx++] = prod;
       continue;
@@ -99,9 +93,9 @@ const fs = require('fs');
     //totalPrice.toInt += shipping.toInt
     //remove the "Shipping: €" part
     shippingText = shippingText
-      .replaceAll(' ', '')
-      .trim()
       .split('Shipping:')[1]
+      .split('\n')[0]
+      .trim()
       .slice(0, -1)
       .replace(',', '.');
     prod[4] = shippingText;
