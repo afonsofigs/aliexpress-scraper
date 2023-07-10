@@ -57,7 +57,7 @@ const fs = require('fs');
     if (
       await page.evaluate(() => {
         const infoDiv =
-          '#root > div > div.product-main > div.product-main-wrap > div.product-info > div.customs-message-wrap';
+          '#root > div.pdp-wrap.pdp-body > div.pdp-body-right > div > div > div.message--wrap--TCbfZuF';
         return (
           document.querySelector(infoDiv) !== null &&
           document.querySelector(infoDiv).innerText.startsWith('Sorry,')
