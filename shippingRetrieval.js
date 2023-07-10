@@ -84,7 +84,11 @@ const fs = require('fs');
     }
 
     if (shippingText.includes('Free')) {
-      printProgress(prod[5], npidx, totalProds);
+      printProgress(
+        `${parseFloat(prod[5])} + Free Shipping`,
+        npidx,
+        totalProds
+      );
       resFullWish[npidx++] = prod;
       continue;
     }
@@ -103,7 +107,11 @@ const fs = require('fs');
       2
     );
     prod[5] = fullPrice;
-    printProgress(fullPrice, npidx, totalProds);
+    printProgress(
+      `${parseFloat(prod[3])} + ${parseFloat(shippingText)} = ${fullPrice}`,
+      npidx,
+      totalProds
+    );
     resFullWish[npidx++] = prod;
   }
 
