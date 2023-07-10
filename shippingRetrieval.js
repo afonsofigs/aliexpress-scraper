@@ -83,6 +83,25 @@ const fs = require('fs');
       continue;
     }
 
+    let priceText = await page.evaluate(
+      () =>
+        document.querySelector(
+          '#root > div.pdp-wrap.pdp-body > div.pdp-body-left > div.pdp-info > div.pdp-info-right > div.price--wrap--tA4MDk4.product-price'
+        ).innerText
+    );
+
+    const regexAllCurrencySymbols =
+      /[$\xA2-\xA5\u058F\u060B\u09F2\u09F3\u09FB\u0AF1\u0BF9\u0E3F\u17DB\u20A0-\u20BD\uA838\uFDFC\uFE69\uFF04\uFFE0\uFFE1\uFFE5\uFFE6]/;
+    const newPrice = parseFloat(
+      priceText.split(regexAllCurrencySymbols)[0].trim().replace(',', '.')
+    );
+
+    // Price correction
+    if (newPrice !== parseFloat(prod[3])) {
+      prod[3] = newPrice;
+      prod[5] = newPrice;
+    }
+
     if (shippingText.includes('Free')) {
       printProgress(
         `${parseFloat(prod[5])} + Free Shipping`,
@@ -96,19 +115,19 @@ const fs = require('fs');
     //Shipping is at index 5 and totalPrice is at 6
     //totalPrice.toInt += shipping.toInt
     //remove the "Shipping: €" part
-    shippingText = shippingText
+    const newShipping = shippingText
       .split('Shipping:')[1]
       .split('\n')[0]
       .trim()
       .slice(0, -1)
       .replace(',', '.');
-    prod[4] = shippingText;
-    const fullPrice = (parseFloat(prod[5]) + parseFloat(shippingText)).toFixed(
+    prod[4] = newShipping;
+    const fullPrice = (parseFloat(prod[5]) + parseFloat(newShipping)).toFixed(
       2
     );
     prod[5] = fullPrice;
     printProgress(
-      `${parseFloat(prod[3])} + ${parseFloat(shippingText)} = ${fullPrice}`,
+      `${parseFloat(prod[3])} + ${parseFloat(newShipping)} = ${fullPrice}`,
       npidx,
       totalProds
     );
