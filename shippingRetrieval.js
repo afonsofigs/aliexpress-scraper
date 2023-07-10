@@ -75,15 +75,16 @@ const fs = require('fs');
       // select the latter
       let nTitleLayouts = 1;
       let firstFlag = true;
-      for (let child of document.querySelector(
-        '#root > div > div.product-main > div.product-main-wrap > div.product-info > div.product-dynamic-shipping > div > div.dynamic-shipping'
-      ).children)
+      // Selector of product-shipping > dynamic-shipping
+      const dynamic_shipping_div =
+        '#root > div.pdp-wrap.pdp-body > div.pdp-body-right > div > div > div.shipping--wrap--Dhb61O7 > div > div';
+      for (let child of document.querySelector(dynamic_shipping_div).children)
         if (child.classList.contains('dynamic-shipping-titleLayout'))
           if (!firstFlag) nTitleLayouts += 1;
           else firstFlag = false;
 
       return document.querySelector(
-        `#root > div > div.product-main > div.product-main-wrap > div.product-info > div.product-dynamic-shipping > div > div > div:nth-child(${nTitleLayouts}) > span > span > strong`
+        dynamic_shipping_div + ` > div:nth-child(${nTitleLayouts})`
       ).innerText;
     });
     // console.log(shippingText);
@@ -98,7 +99,9 @@ const fs = require('fs');
     //totalPrice.toInt += shipping.toInt
     //remove the "Shipping: €" part
     shippingText = shippingText
-      .split('Shipping: ')[1]
+      .replaceAll(' ', '')
+      .trim()
+      .split('Shipping:')[1]
       .slice(0, -1)
       .replace(',', '.');
     prod[4] = shippingText;
