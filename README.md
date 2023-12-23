@@ -19,7 +19,9 @@
 
     - The code run is split in two phases: the product info gathering and the shipping costs gathering phase. each phase can be run with `npm run products` and `npm run shipping`, respectively.
 
-7.  At the end, on this folder, there should be a CSV file named `fullWish.csv` with your products information, including the total price shipped to you. You can now open this file on Excel and easily use it.
+7. If you run `npm run start_orFree`, products that are shipped free if your cart is over 10€/$, are stored as free shipping.
+   
+8.  At the end, on this folder, there should be a CSV file named `fullWish.csv` with your products information, including the total price shipped to you. You can now open this file on Excel and easily use it.
 
 ---
 

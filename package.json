@@ -5,6 +5,7 @@
   "main": "productsRetrieval.js",
   "scripts": {
     "start": "node productsRetrieval.js && node shippingRetrieval.js",
+    "start_orFree": "node productsRetrieval.js && node shippingRetrieval.js --orFreeIsFree",
     "products": "node productsRetrieval.js",
     "shipping": "node shippingRetrieval.js",
     "webserver": "cd aliscraperweb && pnpm i && npm run build && npm run preview -- --open --host",

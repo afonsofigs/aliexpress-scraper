@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import '../app.css';
 	import Filter from './Filter.svelte';
 	import PriceFilter from './PriceFilter.svelte';
@@ -7,7 +6,7 @@
 	let wishlistsSelected: string[] = [];
 	let minPrice = 0;
 
-	let filteredData = data.serverData.items;
+	let filteredData = data.items;
 
 	let realMaxPrice = (() => {
 		let aux = 0;
@@ -32,8 +31,8 @@
 		(() => {
 			filteredData = (
 				wishlistsSelected.length > 0
-					? data.serverData.items.filter((item) => wishlistsSelected.includes(item.Wishlist))
-					: data.serverData.items
+					? data.items.filter((item) => wishlistsSelected.includes(item.Wishlist))
+					: data.items
 			).filter(
 				(item) => minPrice <= parseFloat(item.TotalPrice) && maxPrice >= parseFloat(item.TotalPrice)
 			);
@@ -43,11 +42,7 @@
 
 <div class="p-10">
 	<div class="mb-5 flex flex-row flex-wrap gap-3 sticky top-5">
-		<Filter
-			title="Wishlists"
-			options={data.serverData.wishlists}
-			bind:optionSelected={wishlistsSelected}
-		/>
+		<Filter title="Wishlists" options={data.wishlists} bind:optionSelected={wishlistsSelected} />
 		<PriceFilter bind:minPrice bind:maxPrice bind:realMaxPrice /><!-- Back to top button -->
 		<button
 			class="rounded-full border w-[55px] text-center items-center bg-white"
