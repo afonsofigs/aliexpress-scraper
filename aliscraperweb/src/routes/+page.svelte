@@ -85,12 +85,12 @@
 						<td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
 							{item.Wishlist}
 						</td>
-						<td class="px-4 py-2 text-gray-700 max-w-xs"
-							><a href={item.ProdURL} target="_blank">{item.ProductName}</a></td
-						>
-						<td class="whitespace-nowrap px-4 py-2 text-gray-700"
-							><img src={item.ImageURL} alt={item.ProductName} class="m-auto" /></td
-						>
+						<td class="px-4 py-2 text-gray-700 max-w-xs">
+							<a href={item.ProdURL} target="_blank">{item.ProductName}</a>
+						</td>
+						<td class="whitespace-nowrap px-4 py-2 text-gray-700">
+							<img src={item.ImageURL} alt="Img URL broken" class="m-auto h-60 w-auto" />
+						</td>
 						<td class="whitespace-nowrap px-4 py-2 text-gray-700">{item.TotalPrice}</td>
 					</tr>
 				{/each}

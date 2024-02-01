@@ -4,20 +4,13 @@
 	export let optionSelected: string[];
 </script>
 
-<!--
-	Heads up! 👋
-	
-  Plugins:
-	- @tailwindcss/forms
--->
-
 <details
 	class="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden"
 >
 	<summary
 		class="flex cursor-pointer items-center justify-between gap-2 bg-white p-4 text-gray-900 transition"
 	>
-		<span class="text-sm font-medium"> {title} </span>
+		<span class="text-sm font-medium">{title}</span>
 
 		<span class="transition group-open:-rotate-180">
 			<svg
@@ -35,7 +28,7 @@
 
 	<div class="border border-gray-200 bg-white rounded absolute">
 		<header class="flex items-center justify-between p-4">
-			<span class="text-sm text-gray-700"> {optionSelected.length} Selected </span>
+			<span class="text-sm text-gray-700">{optionSelected.length} Selected</span>
 
 			<button
 				type="button"
